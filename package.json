@@ -1,0 +1,36 @@
+{
+  "name": "sub-attack",
+  "version": "0.0.0",
+  "description": "Sub-Attack Game",
+  "main": "app/index.js",
+  "scripts": {
+    "build": "npm run clean && npm run build:webpack",
+    "build:webpack": "NODE_ENV=production webpack --config webpack.config.prod.js",
+    "clean": "rm -Rf build/*",
+    "lint": "eslint src test",
+    "test": "mocha --compilers js:babel-register \"test/**/*.spec.js\"",
+    "start": "webpack-dev-server --inline"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.10.4",
+    "babel-eslint": "^6.1.0",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "copy-webpack-plugin": "^3.0.1",
+    "eslint": "^2.13.1",
+    "json-loader": "^0.5.4",
+    "redux": "^3.5.2",
+    "redux-actions": "^0.10.0",
+    "redux-thunk": "^2.1.0",
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1",
+    "webpack-hot-middleware": "^2.10.0"
+  },
+  "dependencies": {
+    "brfs": "^1.4.3",
+    "transform-loader": "^0.2.3"
+  }
+}

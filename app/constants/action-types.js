@@ -1,0 +1,6 @@
+export const SYSTEM_TICK = 'SYSTEM_TICK';
+export const PLAYER_MOVE_LEFT = 'PLAYER_MOVE_LEFT';
+export const PLAYER_MOVE_RIGHT = 'PLAYER_MOVE_RIGHT';
+export const PLAYER_STOP = 'PLAYER_STOP';
+
+export const ENEMY_SPAWN = 'ENEMY_SPAWN';
