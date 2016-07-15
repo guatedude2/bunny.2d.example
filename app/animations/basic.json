@@ -1,0 +1,44 @@
+{
+  "fadeIn": {
+    "keys": [
+      {
+        "key": {
+          "alpha": 0
+        }
+      }, {
+        "key": {
+          "alpha": 1
+        }
+      }
+    ]
+  },
+  "fadeOut": {
+    "keys": [
+      {
+        "key": {
+          "alpha": 1
+        }
+      }, {
+        "key": {
+          "alpha": 0
+        }
+      }
+    ]
+  },
+  "slideAndFadeIn": {
+    "keys": [
+      {
+        "key": {
+          "alpha": 0,
+          "position.x": -50
+        }
+      }, {
+        "key": {
+          "alpha": 1,
+          "position.x": 0
+        },
+        "easing": "easeOutQuad"
+      }
+    ]
+  }
+}
