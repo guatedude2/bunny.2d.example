@@ -2,6 +2,8 @@ var path = require('path');
 var webpack = require('webpack');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
+var BUNNY_2D = path.resolve(__dirname, 'node_modules/bunny.2d/dist/bunny.2d.js');
+
 module.exports = {
   devtool: 'eval',
   entry: [
@@ -13,12 +15,12 @@ module.exports = {
   },
   resolve: {
     alias: {
-      'pixi': path.resolve(__dirname, 'node_modules/pixi.js/bin/pixi.min.js')
+      'bunny.2d': BUNNY_2D
     }
   },
   module: {
     noParse: [
-      /node_modules\/pixi\.js\//,
+      BUNNY_2D
     ],
     loaders: [{
       test: /\.(js|jsx)$/,
@@ -38,7 +40,7 @@ module.exports = {
       }
     }),
     new CopyWebpackPlugin([
-      { context: './app/media/', from: '**/*' }
+      { context: path.resolve(__dirname, './media/'), from: '**/*' }
     ])
   ]
 };

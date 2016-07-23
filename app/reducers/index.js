@@ -1,7 +1,7 @@
 import { Store } from 'bunny.2d';
 
-import app from './app';
+import game from './game';
 
 export default Store.combineReducers({
-  app
+  game
 });

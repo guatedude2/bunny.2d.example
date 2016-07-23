@@ -1,48 +1,74 @@
-import {Stage, Keys, Point, TilingSprite, Time} from 'bunny.2d';
+import {Stage, Store, Container, TilingSprite, Time, Body, Input} from 'bunny.2d';
 
 import Bunny from '../sprites/Bunny';
+import * as gameActions from '../actions/game';
 
-export default class Main extends Stage {
+class Main extends Stage {
   constructor() {
-    super(0xEEEEEE);
+    super(0x7acde6);
+
+    this.gameOver = false;
+
     this.bunny = new Bunny();
+    this.bunny.onCollided = () => {
+      this.actions.gameOver();
+    };
 
-    this.map = new TilingSprite('logo.png', this.width, this.height);
-    this.addChildAt(this.map, 0);
+    this.clouds = new TilingSprite('assets/clouds.png', this.width, 380);
+    this.clouds.anchor.set(0.5, 1);
+    this.clouds.position.y = this.height / 2 - 230;
 
+    this.mountains1 = new TilingSprite('assets/mountains1.png', this.width, 335);
+    this.mountains1.anchor.set(0.5, 1);
+    this.mountains1.position.y = this.height / 2 - 230;
+
+    this.mountains2 = new TilingSprite('assets/mountains2.png', this.width, 175);
+    this.mountains2.anchor.set(0.5, 1);
+    this.mountains2.position.y = this.height / 2 - 230;
+
+    this.ground = new TilingSprite('assets/ground.png', this.width, 230);
+    this.ground.anchor.set(0.5, 1);
+    this.ground.position.y = this.height / 2;
+
+    this.world.addBody(Body.createRectangle({
+      y: this.height / 2 - 115,
+      width: this.width,
+      height: 230,
+      isStatic: true
+    }));
+
+    this.world.addChild(this.clouds);
+    this.world.addChild(this.mountains1);
+    this.world.addChild(this.mountains2);
+    this.world.addChild(this.ground);
     this.world.addChild(this.bunny);
-    this.path = [
-      new Point(100, 0),
-      new Point(100, 100),
-      new Point(-200, 200),
-      new Point(-200, -200),
-      new Point(100, -300),
-      new Point(0, 0)
-    ];
+    this.interactive = true;
   }
 
   render() {
-    this.map.tilePosition.set(-this.camera.position.x, -this.camera.position.y);
-    super.render();
-    if (Keys.isPressed(Keys.KEY_LEFT)) {
-      this.bunny.position.x -= 500 * Time.deltaTime;
-    } else if (Keys.isPressed(Keys.KEY_RIGHT)) {
-      this.bunny.position.x += 500 * Time.deltaTime;
+    if (!this.state.gameOver) {
+      if (Input.isPressed('jump')) {
+        if (!this.jumped) {
+          this.bunny.jump();
+          this.jumped = true;
+        }
+      } else {
+        this.jumped = false;
+      }
+      this.clouds.tilePosition.x -= 80 * Time.deltaTime;
+      this.mountains1.tilePosition.x -= 160 * Time.deltaTime;
+      this.mountains2.tilePosition.x -= 240 * Time.deltaTime;
+      this.ground.tilePosition.x -= 320 * Time.deltaTime;
+    } else {
+      this.clouds.tilePosition.x -= 10 * Time.deltaTime;
     }
-
-    if (Keys.isPressed(Keys.KEY_UP)) {
-      this.bunny.position.y -= 500 * Time.deltaTime;
-    } else if (Keys.isPressed(Keys.KEY_DOWN)) {
-      this.bunny.position.y += 500 * Time.deltaTime;
-    }
-  }
-
-  onMouseDown(e) {
-    this.camera.followObject(this.bunny, {
-      distance: 200
-    });
-    // this.camera.followPath(this.path, {
-    //   loop: true
-    // });
   }
 };
+
+const mapStageState = ({game}) => ({
+  gameOver: game.gameOver
+});
+
+Main = Store.connect(Main, mapStageState, gameActions);
+
+export default Main;

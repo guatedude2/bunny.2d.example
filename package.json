@@ -9,7 +9,7 @@
     "clean": "rm -Rf build/*",
     "lint": "eslint src test",
     "test": "mocha --compilers js:babel-register \"test/**/*.spec.js\"",
-    "start": "webpack-dev-server --inline"
+    "start": "webpack-dev-server --host 0.0.0.0 --inline"
   },
   "author": "",
   "license": "ISC",

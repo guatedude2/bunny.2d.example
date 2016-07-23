@@ -2,6 +2,8 @@ var path = require('path');
 var webpack = require('webpack');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
+var BUNNY_2D = path.resolve(__dirname, 'node_modules/bunny.2d/dist/bunny.2d.js');
+
 module.exports = {
   devtool: 'eval',
   entry: [
@@ -12,10 +14,15 @@ module.exports = {
     path: path.resolve(__dirname, 'build'),
     filename: 'js/app.bundle.js'
   },
-  // externals: {
-  //   'bunny.2d': 'bunny2d'
-  // },
+  resolve: {
+    alias: {
+      'bunny.2d': BUNNY_2D
+    }
+  },
   module: {
+    noParse: [
+      BUNNY_2D
+    ],
     loaders: [{
       test: /\.js$/,
       loader: 'babel',
@@ -23,10 +30,6 @@ module.exports = {
     }, {
       test: /\.json$/,
       loader: 'json'
-    }],
-    postLoaders: [{
-      include: path.resolve(__dirname, '../bunny.2d'),
-      loader: 'transform?brfs'
     }]
   },
   plugins: [

@@ -3,12 +3,12 @@ import { Store } from 'bunny.2d';
 import * as types from '../constants/action-types';
 
 export default Store.handleActions({
-  [types.INCREMENT]: (state, {payload}) => (
+  [types.GAME_OVER]: (state, {payload}) => (
     {
       ...state,
-      count: state.count + payload.amount
+      gameOver: true
     }
   ),
 }, {
-  count: 0
+  gameOver: false
 });
