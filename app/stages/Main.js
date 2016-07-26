@@ -1,17 +1,27 @@
-import {Stage, Store, Container, TilingSprite, Time, Body, Input} from 'bunny.2d';
+import {
+  Stage,
+  PoolContainer,
+  Store,
+  TilingSprite,
+  Time,
+  Body,
+  Input
+} from 'bunny.2d';
 
 import Bunny from '../sprites/Bunny';
+import Obstacle from '../sprites/Obstacle';
 import * as gameActions from '../actions/game';
 
 class Main extends Stage {
   constructor() {
     super(0x7acde6);
 
-    this.gameOver = false;
+    this.spawnTime = false;
 
     this.bunny = new Bunny();
     this.bunny.onCollided = () => {
       this.actions.gameOver();
+      this.obstaclePool.enabled = false;
     };
 
     this.clouds = new TilingSprite('assets/clouds.png', this.width, 380);
@@ -37,11 +47,22 @@ class Main extends Stage {
       isStatic: true
     }));
 
+    this.obstaclePool = new PoolContainer(Obstacle, 5);
+    this.obstaclePool.onSpawn = (obstacle) => {
+      obstacle.onOffscreen = () => {
+        this.obstaclePool.release(obstacle);
+      };
+    };
+    this.obstaclePool.onRelease = (obstacle) => {
+      obstacle.position.x = obstacle.initialPosX;
+    };
+
     this.world.addChild(this.clouds);
     this.world.addChild(this.mountains1);
     this.world.addChild(this.mountains2);
     this.world.addChild(this.ground);
     this.world.addChild(this.bunny);
+    this.world.addChild(this.obstaclePool);
     this.interactive = true;
   }
 
@@ -51,6 +72,9 @@ class Main extends Stage {
         if (!this.jumped) {
           this.bunny.jump();
           this.jumped = true;
+          if (!this.spawnTime) {
+            this.spawnTime = 1;
+          }
         }
       } else {
         this.jumped = false;
@@ -59,6 +83,10 @@ class Main extends Stage {
       this.mountains1.tilePosition.x -= 160 * Time.deltaTime;
       this.mountains2.tilePosition.x -= 240 * Time.deltaTime;
       this.ground.tilePosition.x -= 320 * Time.deltaTime;
+      if (this.spawnTime % 90  === 1) {
+        this.obstaclePool.spawn();
+      }
+      this.spawnTime++;
     } else {
       this.clouds.tilePosition.x -= 10 * Time.deltaTime;
     }

@@ -10,7 +10,7 @@ Game.init(750, 1334, {
   inputs: {
     jump: [Input.TouchOneFinger, Input.LeftMouseButton, Input.KeySpace]
   },
-  debugDraw: true
+  // debugDraw: true
 });
 
 // Create a new store and pass it to the game engine
